@@ -1,8 +1,6 @@
 # feher-laszlo-zarogyakorlo
 # Alapozó képzés, gyakorlati záróvizsga
 
-# Alapozó képzés, gyakorlati záróvizsga
-
 ## Indulás
 Futtasd le a _sql/datas.sql_ fileod tartamát az általad használt adatbázis kezelőben.
 Ezzel létrejön egy starwars nevű adatbázis, és benne egy transport table.

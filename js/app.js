@@ -4,7 +4,7 @@
 * @param {Array} listSource: array a lista forrására
 */
 function createListDiv(container) {
-  var listDiv = document.querySelector('.list-div');
+  var listDiv = container.querySelector('.list-div');
   // Van-e már div-a hajóknak? Ha nincs, akkor létrehozzuk.
   if (!listDiv) {
     listDiv = document.createElement('div');
@@ -14,12 +14,41 @@ function createListDiv(container) {
   return listDiv;
 }
 
-function createSpaceship(listDiv, spaceship) {
-  var itemDiv = document.createElement('div');
+function createOneSpaceship(spaceship) {
+  var container = document.querySelector('.one-spaceship');
+  var listDiv = createListDiv(container);
+  listDiv.innerHTML = '';
 
   var img = document.createElement('img');
   img.src = '/img/' + spaceship.image;
   img.alt = spaceship.model;
+  img.onerror = function (ev) {
+    ev.target.src = '/img/noimage.png';
+  };
+
+  var title = document.createElement('h3');
+  title.innerHTML = spaceship.model;
+
+  listDiv.appendChild(img);
+  listDiv.appendChild(title);
+}
+
+function createSpaceship(listDiv, spaceship) {
+  var itemDiv = document.createElement('div');
+  itemDiv.className = 'spaceship-item';
+  // adok neki egy új értéket, ahová az egész objektum bekerül
+  itemDiv.spaceship = spaceship;
+  itemDiv.onclick = function () {
+    // console.log(this.spaceship);
+    createOneSpaceship(this.spaceship);
+  };
+
+  var img = document.createElement('img');
+  img.src = '/img/' + spaceship.image;
+  img.alt = spaceship.model;
+  img.onerror = function (ev) {
+    ev.target.src = '/img/noimage.png';
+  };
 
   var span = document.createElement('span');
   span.innerHTML = spaceship.model;
@@ -37,6 +66,7 @@ function showSpaceshipList(listSource) {
     createSpaceship(listDiv, listSource[i]);
   }
 }
+
 
 function getData(url, callbackFunc) {
   var xhttp = new XMLHttpRequest();
@@ -58,3 +88,14 @@ function successAjax(xhttp) {
 }
 
 getData('/json/spaceships.json', successAjax);
+
+document.querySelector('#search-text').onkeyup = function () {
+  var list = document.querySelectorAll('.spaceship-list .spaceship-item');
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].spaceship.model.toLowerCase().indexOf(this.value.toLowerCase()) < 0) {
+      list[i].style.display = 'none';
+    } else {
+      list[i].style.display = 'block';
+    }
+  }
+};
